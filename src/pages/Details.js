@@ -6,7 +6,9 @@ const Details = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
+    setIsLoading(true);
     axios
       .request({
         method: "GET",
@@ -17,32 +19,53 @@ const Details = () => {
       })
       .then((response) => {
         setData(response.data);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error(error);
+        setIsLoading(false);
       });
   }, [id]);
   return (
     <div className="w-full px-8">
-      <button
-        className="mx-2 md:mx-8 mt-4 md:mt-12 border-2 gap-4 hover:scale-105 duration-200 flex flex-row items-center rounded-md py-2 px-4"
-        onClick={() => navigate("/")}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          fill="currentColor"
-          class="bi bi-arrow-left"
-          viewBox="0 0 16 16"
+      <div className="flex flex-row items-center mx-2 md:mx-8 mt-4 md:mt-12 gap-4">
+        <button
+          className="border-2 gap-4 hover:scale-105 duration-200 flex flex-row items-center rounded-md py-2 px-4"
+          onClick={() => navigate("/")}
         >
-          <path
-            fill-rule="evenodd"
-            d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
-          />
-        </svg>
-        <h5>Back</h5>
-      </button>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-arrow-left"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
+            />
+          </svg>
+          <h5>Back</h5>
+        </button>
+        {isLoading ? (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            className="animate-spin h-6 w-6"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fillRule="evenodd"
+              d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"
+            />
+            <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z" />
+          </svg>
+        ) : null}
+      </div>
+
       <div className="py-4 md:py-12 flex flex-col gap-2 px-4 md:px-20">
         <h1 className="text-4xl">{data?.name}</h1>
         <div className="flex flex-row gap-4 items-center text-stone-500">

@@ -9,7 +9,9 @@ const Home = () => {
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
+    setIsLoading(true);
     axios
       .request({
         method: "GET",
@@ -20,9 +22,11 @@ const Home = () => {
       })
       .then((response) => {
         setData(response.data);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error(error);
+        setIsLoading(false);
       });
   }, []);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -114,8 +118,24 @@ const Home = () => {
       </div>
 
       <section className="p-8">
-        <h2 className="text-2xl mb-4">
+        <h2 className="text-2xl mb-4 flex flex-row items-center gap-4">
           {categories === "Categories" ? "All" : categories} Restaurants
+          {isLoading ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              className="animate-spin h-6 w-6"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fillRule="evenodd"
+                d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"
+              />
+              <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z" />
+            </svg>
+          ) : null}
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 w-full">
           {data
